@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_26_085124) do
+ActiveRecord::Schema.define(version: 2020_08_26_095436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,5 +31,32 @@ ActiveRecord::Schema.define(version: 2020_08_26_085124) do
     t.index ["country_id"], name: "index_groups_on_country_id"
   end
 
+  create_table "hierachies", force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "mock_id"
+    t.index ["mock_id"], name: "index_hierachies_on_mock_id"
+    t.index ["organization_id"], name: "index_hierachies_on_organization_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.string "public_name"
+    t.string "type"
+    t.string "pricing_policy"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   add_foreign_key "groups", "countries"
+  add_foreign_key "hierachies", "organizations"
+  add_foreign_key "hierachies", "organizations", column: "mock_id"
 end
