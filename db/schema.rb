@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_26_095436) do
+ActiveRecord::Schema.define(version: 2020_08_27_101504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,10 +33,10 @@ ActiveRecord::Schema.define(version: 2020_08_26_095436) do
 
   create_table "hierachies", force: :cascade do |t|
     t.bigint "organization_id", null: false
+    t.bigint "child_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "mock_id"
-    t.index ["mock_id"], name: "index_hierachies_on_mock_id"
+    t.index ["child_id"], name: "index_hierachies_on_child_id"
     t.index ["organization_id"], name: "index_hierachies_on_organization_id"
   end
 
@@ -45,18 +45,22 @@ ActiveRecord::Schema.define(version: 2020_08_26_095436) do
     t.string "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "organization_id"
   end
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.string "public_name"
-    t.string "type"
+    t.string "org_type"
     t.string "pricing_policy"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "group_id"
   end
 
   add_foreign_key "groups", "countries"
   add_foreign_key "hierachies", "organizations"
-  add_foreign_key "hierachies", "organizations", column: "mock_id"
+  add_foreign_key "hierachies", "organizations", column: "child_id"
+  add_foreign_key "locations", "organizations"
+  add_foreign_key "organizations", "groups"
 end
